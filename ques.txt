@@ -1,0 +1,47 @@
+## Recursion and BT
+    PICK / NOT PICK (Subset Pattern)
+        Subsets ⭐
+        Subsets II (duplicates) ⭐
+        Combination Sum ⭐
+        Combination Sum II
+        Partition Equal Subset Sum (DP variant too)
+        Count subsets with sum k (DP solution is the best one here)
+    FOR-LOOP BACKTRACKING
+        Permutations ⭐
+        Permutations II ⭐
+        Combinations
+        Letter Combinations of Phone Number
+    CONSTRAINT BACKTRACKING
+        N-Queens ⭐⭐⭐
+        Sudoku Solver ⭐
+        Word Search ⭐
+    PARTITION BACKTRACKING
+        Palindrome Partitioning ⭐
+    ADDITIONAL
+        pow()
+        Genrate Parentheses
+
+## BS
+    Search Insert Position
+    First & Last Position ⭐
+    Count occurrences
+    Search in Rotated Sorted Array ⭐
+    Find Minimum in Rotated Array
+    Find Peak Element ⭐
+    Peak in Mountain Array
+    Koko Eating Bananas ⭐
+    Split Array Largest Sum ⭐
+    Koko Eating Bananas
+    Path With Minimum Effort ⭐
+    Search 2D Matrix
+    Median of 2 sorted arrays
+
+#Hashing
+    Design Hashmap
+    
+
+
+
+
+
+    
