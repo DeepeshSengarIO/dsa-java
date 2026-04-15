@@ -94,6 +94,7 @@ public class arrays {
             }else{
                 consecutiveZeros = 0;
             }
+            // Each new zero in a run of length k adds k new subarrays
             count+=consecutiveZeros;
         }
         return count;
@@ -164,6 +165,8 @@ public class arrays {
             nums[left++] = nums[right];
             nums[right--] = temp;
         }
+
+        
 
     }
 }
