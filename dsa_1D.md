@@ -1,4 +1,4 @@
-## 1. Arrays and Strings
+## 1. Arrays
 ---
 
 ### 1.1 Swap, Reverse and Rotate
@@ -98,8 +98,51 @@ int[] productOfArrayExceptSelf(int[] arr){
 }
 ```
 
-### 1.5 State Discovery (Lexicographical)
-Finding the "next" logical sequence requires identifying the first point of "decrease" from the end.
+### 1.5 Lexicographical Next State
+Systematic way to find the "next" logical arrangement of a set of items based on a specific ordering (usually alphabetical or numerical). If you imagine all possible permutations of a set listed out like words in a dictionary, this pattern allows you to jump from your current "word" to the very next one without generating the entire list.
+**Question**: Next Permutation in an integer array
+**Idea**: To find the next lexographical state you follow 4 steps:
+Step 1: Scan from right to left, find the first element that is smaller than the element to its right. So basically `arr[i] > arr[i+1]`. We call this index as **`pivot`**.
+Step 2: Scan again from right to left, this time find the smallest number which is bigger than pivot. clearly speaking, Find the smallest number in the suﬃx `[pivot+1, n-1]` that is larger than `nums[pivot]`. we call this **`successor`**
+Step 3: swap the **`pivot`** and **`successor`**.
+Step 4: Reverse everything to the right of the pivot's original position. Why? After the swap, the right side is still in descending order. Reversing it turns it into ascending order (the "smallest" it could be), giving us the immediate next permutation.
+```java
+void nextPermutation(int[] arr){
+    int n = nums.length;
+    int pivot = n-2;
+    while(i>=0 && nums[pivot] > nums[pivot+1]) pivot--; // Step 1: Find the pivot index, from right to left <-
+    if(pivot>=0){ // Step 2: Find Successor
+        int successor = n-1;
+        while(nums[successor] <= nums[pivot]) successor--;
+        swap(nums, pivot, successor); // Step 3
+    }
+    reverse(nums, pivot+1, n-1); // Step 4
+}
+```
+
+### 1.6 In-Place State Flagging (The "Flag")
+When an array contains numbers in a fixed range (like [0,N]), you can use the sign of the numbers at specific indices to store boolean information ("Have I seen this?").
+**Question**: Find All Numbers Disappeared in an Array.
+**Idea**: For every number x you see, go to index `∣x∣−1` and make the number there negative. Any index
+that remains positive at the end corresponds to a missing number.
+```java
+List<Integer> findAllDisappeared(int[] arr){
+    for(int i = 0; i < arr.length; i++){
+        int idx = Math.abs(arr[i])-1; 
+        if(nums[idx]>0) nums[idx] = -nums[idx]; // flag 
+    }
+    List<Integer> result = new ArrayList<>();
+    for(int i = 0; i < nums.length; i++){
+        if(nums[i]>0) res.add(i+1); // add the remaining positive ones to result.
+    }
+    return res;
+}
+```
+
+## 2. Strings
+---
+
+
 
 
 
