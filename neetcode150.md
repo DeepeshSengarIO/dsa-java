@@ -1,4 +1,6 @@
-# NeetCode 150 Revision Guide
+# Google SWE III (L4) DSA Problem Playbook
+
+> Curated for Google SWE III (L4) Warsaw Bar. Low-signal trivia removed; high-frequency Google graph, tree, prefix sum, sweep line, and dynamic programming problems added.
 
 ## 1. Arrays and Hashing
 
@@ -17,49 +19,7 @@
     *   **Interviewers often ask:** "Can you solve this with $O(1)$ space?" -> Usually implies Sorting or In-place modification.
 
 ---
-
-### Q1: Contains Duplicate (LC 217)
-**Example:** `nums = [1, 2, 3, 1]` -> `true`  
-**Explanation:** Return true if any value appears at least twice. 
-
-**Pattern:** $O(N)$ Space/Time trade-off using a `HashSet`.
-
-```java
-public boolean containsDuplicate(int[] nums) {
-    Set<Integer> seen = new HashSet<>();
-    for (int num : nums) {
-        if (!seen.add(num)) return true;
-    }
-    return false;
-}
-```
-
----
-
-### Q2: Valid Anagram (LC 242)
-**Example:** `s = "anagram", t = "nagaram"` -> `true`  
-**Explanation:** Check if `t` is a rearrangement of `s`.
-
-**Key Point:** Use a frequency array of size 26. Increment for `s`, decrement for `t`.
-
-```java
-public boolean isAnagram(String s, String t) {
-    if (s.length() != t.length()) return false;
-    int[] freq = new int[26];
-    for (int i = 0; i < s.length(); i++) {
-        freq[s.charAt(i) - 'a']++;
-        freq[t.charAt(i) - 'a']--;
-    }
-    for (int count : freq) {
-        if (count != 0) return false;
-    }
-    return true;
-}
-```
-
----
-
-### Q3: Two Sum (LC 1)
+### Q1: Two Sum (LC 1)
 **Example:** `nums = [2,7,11,15], target = 9` -> `[0,1]`  
 **Explanation:** Find indices of two numbers that add up to target.
 
@@ -82,7 +42,7 @@ public int[] twoSum(int[] nums, int target) {
 
 ---
 
-### Q4: Group Anagrams (LC 49)
+### Q2: Group Anagrams (LC 49)
 **Example:** `strs = ["eat","tea","tan","ate","nat","bat"]`  
 **Output:** `[["bat"],["nat","tan"],["ate","eat","tea"]]`  
 
@@ -114,7 +74,7 @@ public List<List<String>> groupAnagrams(String[] strs) {
 
 ---
 
-### Q5: Top K Frequent Elements (LC 347)
+### Q3: Top K Frequent Elements (LC 347)
 **Example:** `nums = [1,1,1,2,2,3], k = 2` -> `[1,2]`  
 **Explanation:** Return the `k` most frequent elements in **O(N)**.
 
@@ -153,9 +113,10 @@ public int[] topKFrequent(int[] nums, int k) {
     return res;
 }
 ```
+
 ---
 
-### Q6: Product of Array Except Self (LC 238)
+### Q4: Product of Array Except Self (LC 238)
 **Example:** `nums = [1,2,3,4]` -> `[24,12,8,6]`  
 **Explanation:** Find products of all elements except `nums[i]` without using division in **O(N)**.
 
@@ -184,7 +145,7 @@ public int[] productExceptSelf(int[] nums) {
 
 ---
 
-### Q7: Valid Sudoku (LC 36)
+### Q5: Valid Sudoku (LC 36)
 **Example:** Standard 9x9 Sudoku board.  
 **Explanation:** Check if filled cells are valid (no repeats in row, col, or 3x3 box).
 
@@ -213,7 +174,7 @@ public boolean isValidSudoku(char[][] board) {
 
 ---
 
-### Q8: Longest Consecutive Sequence (LC 128)
+### Q6: Longest Consecutive Sequence (LC 128)
 **Example:** `nums = [100,4,200,1,3,2]` -> `4` ([1, 2, 3, 4])  
 **Explanation:** Find length of the longest consecutive sequence in **O(N)**.
 
@@ -245,7 +206,7 @@ public int longestConsecutive(int[] nums) {
 
 ---
 
-### Q9: Encode and Decode Strings (LC 271)
+### Q7: Encode and Decode Strings (LC 271)
 **Example:** `["lint","code"]` -> `"4#lint4#code"`  
 **Explanation:** Design an algorithm to encode/decode a list of strings.
 
@@ -270,6 +231,7 @@ public List<String> decode(String s) {
     return res;
 }
 ```
+
 ---
 
 ## 2. Two Pointers
@@ -283,33 +245,7 @@ public List<String> decode(String s) {
 5.  **Space Efficiency:** Two Pointers usually achieve **$O(1)$ auxiliary space**, which is a common follow-up requirement after providing a Hashing-based solution.
 
 ---
-
-### Q1: Valid Palindrome (LC 125)
-**Example:** `"A man, a plan, a canal: Panama"` -> `true`  
-**Explanation:** Check if a string is a palindrome, ignoring non-alphanumeric characters and case.
-
-**Pattern:** Converging pointers. Use `Character.isLetterOrDigit` to skip "junk".
-
-```java
-public boolean isPalindrome(String s) {
-    int l = 0, r = s.length() - 1;
-    while (l < r) {
-        // Skip non-alphanumeric from left and right
-        while (l < r && !Character.isLetterOrDigit(s.charAt(l))) l++;
-        while (l < r && !Character.isLetterOrDigit(s.charAt(r))) r--;
-        
-        if (Character.toLowerCase(s.charAt(l)) != Character.toLowerCase(s.charAt(r))) {
-            return false;
-        }
-        l++; r--;
-    }
-    return true;
-}
-```
-
----
-
-### Q2: Two Sum II - Input Array Is Sorted (LC 167)
+### Q1: Two Sum II - Input Array Is Sorted (LC 167)
 **Example:** `nums = [2,7,11,15], target = 9` -> `[1, 2]` (1-indexed)  
 **Explanation:** Find two numbers that sum to target in a sorted array using $O(1)$ space.
 
@@ -330,7 +266,7 @@ public int[] twoSum(int[] numbers, int target) {
 
 ---
 
-### Q3: 3Sum (LC 15)
+### Q2: 3Sum (LC 15)
 **Example:** `nums = [-1,0,1,2,-1,-4]` -> `[[-1,-1,2],[-1,0,1]]`  
 **Explanation:** Find all unique triplets that sum to zero.
 
@@ -364,7 +300,7 @@ public List<List<Integer>> threeSum(int[] nums) {
 
 ---
 
-### Q4: Container With Most Water (LC 11)
+### Q3: Container With Most Water (LC 11)
 **Example:** `height = [1,8,6,2,5,4,8,3,7]` -> `49`  
 **Explanation:** Find two lines that together with the x-axis forms a container containing the most water.
 
@@ -390,7 +326,7 @@ public int maxArea(int[] height) {
 
 ---
 
-### Q5: Trapping Rain Water (LC 42)
+### Q4: Trapping Rain Water (LC 42)
 **Example:** `height = [0,1,0,2,1,0,1,3,2,1,2,1]` -> `6`  
 **Explanation:** Compute how much water it can trap after raining.
 
@@ -420,9 +356,234 @@ public int trap(int[] height) {
     return res;
 }
 ```
+
 ---
 
-## 3. Sliding Window
+## 3. Prefix Sum & Difference Arrays (Google Core)
+
+### Core Theory & Patterns
+
+1.  **Prefix Sum Invariant:** $\text{Sum}(i \dots j) = \text{Prefix}[j] - \text{Prefix}[i - 1]$.
+    *   To find if a subarray sums to $k$: check if $\text{Prefix}[j] - k$ was seen previously in a Hash Map.
+    *   **Base Case:** Always initialize `map.put(0, 1)` (for counting) or `map.put(0, -1)` (for max/min length indices) to account for valid subarrays starting at index $0$.
+2.  **Handling Negatives (Why Sliding Window Fails):**
+    *   Sliding window requires monotonicity (expanding increases sum, shrinking decreases sum). When negative numbers are present, the window sum is non-monotonic.
+    *   Prefix Sum + Hash Map works in strictly $O(N)$ time regardless of negative values.
+3.  **Modular Prefix Sums:**
+    *   $\text{Sum}(i \dots j) \pmod k = 0 \iff \text{Prefix}[j] \equiv \text{Prefix}[i - 1] \pmod k$.
+    *   **Java Negative Modulo Bug:** In Java, `-1 % 5 = -1`. Always normalize remainders: `rem = ((sum % k) + k) % k`.
+4.  **2D Matrix Prefix Sum:**
+    *   Precomputation: $dp[r+1][c+1] = mat[r][c] + dp[r][c+1] + dp[r+1][c] - dp[r][c]$.
+    *   Query $(r1, c1) \to (r2, c2)$ in $O(1)$: $dp[r2+1][c2+1] - dp[r1][c2+1] - dp[r2+1][c1] + dp[r1][c1]$.
+5.  **Difference Array (Range Updates in $O(1)$):**
+    *   Add $v$ to range $[l, r]$: `diff[l] += v; diff[r + 1] -= v;`.
+    *   Reconstruct the final array by taking the running prefix sum of `diff` in $O(N)$.
+
+
+---
+
+### Q1: Subarray Sum Equals K (LC 560)
+**Example:** `nums = [1,1,1], k = 2` -> `2`  
+**Explanation:** Find the total number of continuous subarrays whose sum equals $k$.
+
+**Pattern:** **Prefix Sum + HashMap**. Since elements can be negative, two pointers/sliding window will not work. Compute running prefix sum. Check if `sum - k` exists in map.
+
+```java
+public int subarraySum(int[] nums, int k) {
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, 1); // 1 empty subarray with sum 0
+    int sum = 0, count = 0;
+
+    for (int num : nums) {
+        sum += num;
+        if (map.containsKey(sum - k)) {
+            count += map.get(sum - k);
+        }
+        map.merge(sum, 1, Integer::sum);
+    }
+    return count;
+}
+```
+**Complexity:** $O(N)$ time, $O(N)$ space.
+
+---
+
+### Q2: Contiguous Array (LC 525)
+**Example:** `nums = [0,1,0]` -> `2` ([0, 1] or [1, 0])  
+**Explanation:** Find the maximum length of a contiguous subarray with an equal number of 0s and 1s.
+
+**Pattern:** **Value Transformation + Prefix Sum**. Treat `0` as `-1` and `1` as `+1`. An equal number of 0s and 1s corresponds to a subarray with sum $0$. Store the **earliest** index of each prefix sum to maximize subarray length $i - \text{map.get}(sum)$.
+
+```java
+public int findMaxLength(int[] nums) {
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1); // Prefix sum 0 seen at dummy index -1
+    int sum = 0, maxLen = 0;
+
+    for (int i = 0; i < nums.length; i++) {
+        sum += (nums[i] == 1) ? 1 : -1;
+        if (map.containsKey(sum)) {
+            maxLen = Math.max(maxLen, i - map.get(sum));
+        } else {
+            map.put(sum, i); // Only store first occurrence to maximize length
+        }
+    }
+    return maxLen;
+}
+```
+**Complexity:** $O(N)$ time, $O(N)$ space.
+
+---
+
+### Q3: Continuous Subarray Sum (LC 523)
+**Example:** `nums = [23,2,4,6,7], k = 6` -> `true` ([2, 4] sums to 6)  
+**Explanation:** Return true if array has a contiguous subarray of size at least 2 whose sum is a multiple of $k$.
+
+**Pattern:** **Prefix Modulo + Index Tracking**. If $\text{Prefix}[j] \pmod k == \text{Prefix}[i] \pmod k$, the sum between them is a multiple of $k$. Store earliest index of each remainder. Check $j - i \ge 2$.
+
+```java
+public boolean checkSubarraySum(int[] nums, int k) {
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1); // Remainder 0 at index -1
+    int runningSum = 0;
+
+    for (int i = 0; i < nums.length; i++) {
+        runningSum += nums[i];
+        int rem = runningSum % k;
+        if (rem < 0) rem += k; // Safe modulo
+
+        if (map.containsKey(rem)) {
+            if (i - map.get(rem) >= 2) return true;
+        } else {
+            map.put(rem, i);
+        }
+    }
+    return false;
+}
+```
+**Complexity:** $O(N)$ time, $O(\min(N, K))$ space.
+
+---
+
+### Q4: Subarray Sums Divisible by K (LC 974)
+**Example:** `nums = [4,5,0,-2,-3,1], k = 5` -> `7`  
+**Explanation:** Find the number of non-empty subarrays that have a sum divisible by $k$.
+
+**Pattern:** **Remainder Frequency Map**. Number of valid subarrays ending at index $i$ is the number of times remainder `rem` has been seen previously.
+
+```java
+public int subarraysDivByK(int[] nums, int k) {
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, 1);
+    int sum = 0, count = 0;
+
+    for (int num : nums) {
+        sum += num;
+        int rem = ((sum % k) + k) % k; // Normalization for negative remainders
+        count += map.getOrDefault(rem, 0);
+        map.merge(rem, 1, Integer::sum);
+    }
+    return count;
+}
+```
+**Complexity:** $O(N)$ time, $O(K)$ space.
+
+---
+
+### Q5: Range Sum Query 2D - Immutable (LC 304)
+**Example:** Matrix queries for subgrid sum $(r1, c1)$ to $(r2, c2)$ in $O(1)$.  
+**Explanation:** Precompute 2D prefix sums so each query runs in $O(1)$ time.
+
+**Pattern:** **Inclusion-Exclusion Principle**. $dp[r+1][c+1] = mat[r][c] + dp[r][c+1] + dp[r+1][c] - dp[r][c]$.
+
+```java
+class NumMatrix {
+    private int[][] dp;
+
+    public NumMatrix(int[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0) return;
+        int m = matrix.length, n = matrix[0].length;
+        dp = new int[m + 1][n + 1];
+
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; c < n; c++) {
+                dp[r + 1][c + 1] = matrix[r][c] + dp[r][c + 1] + dp[r + 1][c] - dp[r][c];
+            }
+        }
+    }
+
+    public int sumRegion(int r1, int c1, int r2, int c2) {
+        return dp[r2 + 1][c2 + 1] - dp[r1][c2 + 1] - dp[r2 + 1][c1] + dp[r1][c1];
+    }
+}
+```
+**Complexity:** Precomputation $O(M \times N)$, Query $O(1)$, Space $O(M \times N)$.
+
+---
+
+### Q6: Corporate Flight Bookings / Range Addition (LC 1109 / LC 370)
+**Example:** `bookings = [[1,2,10],[2,3,20],[2,5,25]], n = 5` -> `[10,55,45,25,25]`  
+**Explanation:** Process multiple range additions $[l, r]$ with value $val$ efficiently.
+
+**Pattern:** **Difference Array**. Mark `diff[l] += val` and `diff[r + 1] -= val`. The running prefix sum reconstructs the array in $O(N)$.
+
+```java
+public int[] corpFlightBookings(int[][] bookings, int n) {
+    int[] diff = new int[n + 2];
+    for (int[] b : bookings) {
+        int l = b[0], r = b[1], seats = b[2];
+        diff[l] += seats;
+        diff[r + 1] -= seats;
+    }
+
+    int[] res = new int[n];
+    int running = 0;
+    for (int i = 1; i <= n; i++) {
+        running += diff[i];
+        res[i - 1] = running;
+    }
+    return res;
+}
+```
+**Complexity:** $O(N + Q)$ time where $Q$ is updates count, $O(N)$ space.
+
+---
+
+### Q7: Shortest Subarray with Sum at Least K (LC 862)
+**Example:** `nums = [2,-1,2], k = 3` -> `3`  
+**Explanation:** Find the length of the shortest, non-empty subarray of `nums` with sum $\ge k$.
+
+**Pattern:** **Monotonic Deque over Prefix Sums**. Since `nums` contains negative values, prefix sums are non-monotonic. 
+1. Maintain a deque of prefix sum indices in strictly increasing order.
+2. If $P[i] - P[\text{deque.peekFirst()}] \ge k$, record length and `pollFirst()` (no future index $j > i$ will beat this length).
+3. If $P[i] \le P[\text{deque.peekLast()}]$, `pollLast()` (current prefix sum is smaller and has a higher index, strictly better as a left boundary).
+
+```java
+public int shortestSubarray(int[] nums, int k) {
+    int n = nums.length;
+    long[] P = new long[n + 1];
+    for (int i = 0; i < n; i++) P[i + 1] = P[i] + nums[i];
+
+    int minLen = n + 1;
+    Deque<Integer> deque = new ArrayDeque<>();
+
+    for (int i = 0; i <= n; i++) {
+        while (!deque.isEmpty() && P[i] - P[deque.peekFirst()] >= k) {
+            minLen = Math.min(minLen, i - deque.pollFirst());
+        }
+        while (!deque.isEmpty() && P[i] <= P[deque.peekLast()]) {
+            deque.pollLast();
+        }
+        deque.offerLast(i);
+    }
+    return minLen <= n ? minLen : -1;
+}
+```
+**Complexity:** $O(N)$ time, $O(N)$ space.
+
+---
+
+## 4. Sliding Window
 
 ### Core Theory & Patterns
 
@@ -434,7 +595,6 @@ public int trap(int[] height) {
 4.  **State Tracking:** Keep a variable (like `matches` or `need`) to avoid re-scanning the entire window at every step.
 
 ---
-
 ### Q1: Best Time to Buy and Sell Stock (LC 121)
 **Example:** `prices = [7,1,5,3,6,4]` -> `5` (Buy at 1, sell at 6)  
 **Explanation:** Find the maximum profit from one transaction.
@@ -514,34 +674,27 @@ public int characterReplacement(String s, int k) {
 **Pattern:** **Fixed Window ($O(26)$ or $O(1)$ comparison)**. Use two frequency arrays. Instead of `Arrays.equals`, track a `matches` count of characters having the same frequency to reach true $O(N)$.
 
 ```java
-public boolean checkInclusion(String s1, String s2) {
-    if (s1.length() > s2.length()) return false;
-    int[] s1Count = new int[26], s2Count = new int[26];
-    for (int i = 0; i < s1.length(); i++) {
-        s1Count[s1.charAt(i) - 'a']++;
-        s2Count[s2.charAt(i) - 'a']++;
+    public boolean checkInclusion(String s1, String s2) {
+        if(s2.length() < s1.length()) return false;
+        int[] a1 = new int[26], a2 = new int[26];
+        for(int i = 0; i < s1.length(); i++){
+            a1[s1.charAt(i)-'a']++;
+            a2[s2.charAt(i)-'a']++;
+        }
+        for(int i = s1.length(); i < s2.length(); i++){
+            if(isSame(a1, a2)) return true;
+            a2[s2.charAt(i)-'a']++;
+            a2[s2.charAt(i-s1.length())-'a']--;
+        }
+        return (isSame(a1, a2));
     }
-    
-    int matches = 0;
-    for (int i = 0; i < 26; i++) if (s1Count[i] == s2Count[i]) matches++;
 
-    for (int r = s1.length(); r < s2.length(); r++) {
-        if (matches == 26) return true;
-        
-        int add = s2.charAt(r) - 'a', remove = s2.charAt(r - s1.length()) - 'a';
-        
-        // Update state for 'add'
-        s2Count[add]++;
-        if (s2Count[add] == s1Count[add]) matches++;
-        else if (s2Count[add] == s1Count[add] + 1) matches--;
-        
-        // Update state for 'remove'
-        s2Count[remove]--;
-        if (s2Count[remove] == s1Count[remove]) matches++;
-        else if (s2Count[remove] == s1Count[remove] - 1) matches--;
+    private boolean isSame(int[] a1, int[] a2){
+        for(int i = 0; i < a1.length; i++){
+            if(a1[i]!=a2[i]) return false;
+        }
+        return true;
     }
-    return matches == 26;
-}
 ```
 
 ---
@@ -617,9 +770,10 @@ public int[] maxSlidingWindow(int[] nums, int k) {
     return res;
 }
 ```
+
 ---
 
-## 4. Stack
+## 5. Stack
 
 ### Core Theory & Patterns
 
@@ -632,29 +786,7 @@ public int[] maxSlidingWindow(int[] nums, int k) {
 5.  **State Reconstruction:** Stacks are used behind the scenes for recursion. Any recursive problem can be solved iteratively using an explicit stack to save memory on the JVM's call stack.
 
 ---
-
-### Q1: Valid Parentheses (LC 20)
-**Example:** `s = "()[]{}"` -> `true`  
-**Explanation:** Determine if input brackets are closed in the correct order.
-
-**Pattern:** **Matching Brackets**. Push the expected *closing* bracket onto the stack. If the current character doesn't match `stack.pop()`, the string is invalid.
-
-```java
-public boolean isValid(String s) {
-    Deque<Character> stack = new ArrayDeque<>();
-    for (char c : s.toCharArray()) {
-        if (c == '(') stack.push(')');
-        else if (c == '{') stack.push('}');
-        else if (c == '[') stack.push(']');
-        else if (stack.isEmpty() || stack.pop() != c) return false;
-    }
-    return stack.isEmpty();
-}
-```
-
----
-
-### Q2: Min Stack (LC 155)
+### Q1: Min Stack (LC 155)
 **Example:** `push(-2), push(0), push(-3), getMin()` -> `-3`  
 **Explanation:** Design a stack that retrieves the minimum element in **O(1)**.
 
@@ -684,7 +816,7 @@ class MinStack {
 
 ---
 
-### Q3: Evaluate Reverse Polish Notation (LC 150)
+### Q2: Evaluate Reverse Polish Notation (LC 150)
 **Example:** `["2","1","+","3","*"]` -> `(2 + 1) * 3 = 9`  
 **Explanation:** Evaluate an arithmetic expression in postfix notation.
 
@@ -711,7 +843,7 @@ public int evalRPN(String[] tokens) {
 
 ---
 
-### Q4: Generate Parentheses (LC 22)
+### Q3: Generate Parentheses (LC 22)
 **Example:** `n = 3` -> `["((()))","(()())","(())()","()(())","()()()"]`  
 **Explanation:** Generate all combinations of well-formed parentheses.
 
@@ -744,7 +876,7 @@ private void backtrack(List<String> res, StringBuilder sb, int open, int close, 
 
 ---
 
-### Q5: Daily Temperatures (LC 739)
+### Q4: Daily Temperatures (LC 739)
 **Example:** `temp = [73,74,75,71,69,72,76,73]` -> `[1,1,4,2,1,1,0,0]`  
 **Explanation:** Find how many days to wait for a warmer temperature.
 
@@ -768,7 +900,7 @@ public int[] dailyTemperatures(int[] temperatures) {
 
 ---
 
-### Q6: Car Fleet (LC 853)
+### Q5: Car Fleet (LC 853)
 **Example:** `target = 12, pos = [10,8,0,5], speed = [2,4,1,1]` -> `3`  
 **Explanation:** Cars moving towards a target. If a faster car catches a slower one, they form a fleet.
 
@@ -797,7 +929,7 @@ public int carFleet(int target, int[] position, int[] speed) {
 
 ---
 
-### Q7: Largest Rectangle in Histogram (LC 84)
+### Q6: Largest Rectangle in Histogram (LC 84)
 **Example:** `heights = [2,1,5,6,2,3]` -> `10`  
 **Explanation:** Find the largest rectangle area in a histogram.
 
@@ -821,9 +953,10 @@ public int largestRectangleArea(int[] heights) {
     return maxArea;
 }
 ```
+
 ---
 
-## 5. Binary Search
+## 6. Binary Search
 
 ### Core Theory & Patterns
 
@@ -836,29 +969,7 @@ public int largestRectangleArea(int[] heights) {
 5.  **Virtual Indexing:** Treat a 2D matrix as a 1D array using `matrix[mid / cols][mid % cols]`.
 
 ---
-
-### Q1: Binary Search (LC 704)
-**Example:** `nums = [-1,0,3,5,9,12], target = 9` -> `4`  
-**Explanation:** Standard search for a target in a sorted array.
-
-**Pattern:** Standard iterative template.
-
-```java
-public int search(int[] nums, int target) {
-    int l = 0, r = nums.length - 1;
-    while (l <= r) {
-        int mid = l + (r - l) / 2;
-        if (nums[mid] == target) return mid;
-        if (nums[mid] < target) l = mid + 1;
-        else r = mid - 1;
-    }
-    return -1;
-}
-```
-
----
-
-### Q2: Search a 2D Matrix (LC 74)
+### Q1: Search a 2D Matrix (LC 74)
 **Example:** `matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3` -> `true`  
 **Explanation:** Search in a matrix where rows and columns are sorted.
 
@@ -884,7 +995,7 @@ public boolean searchMatrix(int[][] matrix, int target) {
 
 ---
 
-### Q3: Koko Eating Bananas (LC 875)
+### Q2: Koko Eating Bananas (LC 875)
 **Example:** `piles = [3,6,7,11], h = 8` -> `4`  
 **Explanation:** Find the minimum speed `k` to eat all bananas within `h` hours.
 
@@ -916,7 +1027,7 @@ public int minEatingSpeed(int[] piles, int h) {
 
 ---
 
-### Q4: Find Minimum in Rotated Sorted Array (LC 153)
+### Q3: Find Minimum in Rotated Sorted Array (LC 153)
 **Example:** `nums = [3,4,5,1,2]` -> `1`  
 **Explanation:** Find the minimum element in an array that was rotated.
 
@@ -938,7 +1049,7 @@ public int findMin(int[] nums) {
 
 ---
 
-### Q5: Search in Rotated Sorted Array (LC 33)
+### Q4: Search in Rotated Sorted Array (LC 33)
 **Example:** `nums = [4,5,6,7,0,1,2], target = 0` -> `4`  
 **Explanation:** Search for a target in an array that was rotated.
 
@@ -968,7 +1079,7 @@ public int search(int[] nums, int target) {
 
 ---
 
-### Q6: Time Based Key-Value Store (LC 981)
+### Q5: Time Based Key-Value Store (LC 981)
 **Example:** `set("foo", "bar", 1), get("foo", 1)` -> `"bar"`  
 **Explanation:** Store keys with multiple values at different timestamps. `get` returns the value with the largest `timestamp_prev <= timestamp`.
 
@@ -1008,7 +1119,7 @@ class TimeMap {
 
 ---
 
-### Q7: Median of Two Sorted Arrays (LC 4)
+### Q6: Median of Two Sorted Arrays (LC 4)
 **Example:** `nums1 = [1,3], nums2 = [2]` -> `2.0`  
 **Explanation:** Find the median of the combined sorted arrays in $O(\log(\min(n, m)))$.
 
@@ -1047,9 +1158,55 @@ public double findMedianSortedArrays(int[] nums1, int[] nums2) {
     return 0.0;
 }
 ```
+
 ---
 
-## 6. Linked List
+### Q7: Split Array Largest Sum (LC 410)
+**Example:** `nums = [7,2,5,10,8], k = 2` -> `18` (split into [7,2,5] and [10,8])  
+**Explanation:** Split array into $k$ non-empty continuous subarrays such that the largest sum among them is minimized.
+
+**Pattern:** **Binary Search on Feasibility Space**. The answer is bounded in range $[\max(nums), \sum nums]$. Use a greedy predicate `canSplit(mid, k)`: if current running sum exceeds `mid`, start a new subarray.
+
+```java
+public int splitArray(int[] nums, int k) {
+    int maxVal = 0;
+    long sum = 0;
+    for (int n : nums) {
+        maxVal = Math.max(maxVal, n);
+        sum += n;
+    }
+
+    long l = maxVal, r = sum;
+    while (l < r) {
+        long mid = l + (r - l) / 2;
+        if (canSplit(nums, k, mid)) {
+            r = mid; // Feasible, try smaller maximum
+        } else {
+            l = mid + 1; // Infeasible, must increase threshold
+        }
+    }
+    return (int) l;
+}
+
+private boolean canSplit(int[] nums, int k, long maxAllowed) {
+    int pieces = 1;
+    long currentSum = 0;
+    for (int n : nums) {
+        if (currentSum + n > maxAllowed) {
+            pieces++;
+            currentSum = n;
+        } else {
+            currentSum += n;
+        }
+    }
+    return pieces <= k;
+}
+```
+**Complexity:** $O(N \log(\sum nums - \max(nums)))$ time, $O(1)$ space.
+
+---
+
+## 7. Linked List
 
 ### Core Theory & Patterns
 
@@ -1062,53 +1219,7 @@ public double findMedianSortedArrays(int[] nums1, int[] nums2) {
 5.  **Doubly Linked List + HashMap:** The standard architecture for an **LRU Cache**.
 
 ---
-
-### Q1: Reverse Linked List (LC 206)
-**Example:** `1->2->3` -> `3->2->1`  
-**Pattern:** Iterative 3-pointer swap.
-
-```java
-public ListNode reverseList(ListNode head) {
-    ListNode prev = null, curr = head;
-    while (curr != null) {
-        ListNode next = curr.next; // Save next
-        curr.next = prev;          // Reverse link
-        prev = curr;               // Move prev
-        curr = next;               // Move curr
-    }
-    return prev;
-}
-```
-
----
-
-### Q2: Merge Two Sorted Lists (LC 21)
-**Example:** `1->2->4, 1->3->4` -> `1->1->2->3->4->4`  
-**Pattern:** **Dummy Node**. Compare heads and attach the smaller one to the result list.
-
-```java
-public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-    ListNode dummy = new ListNode(0);
-    ListNode curr = dummy;
-    
-    while (list1 != null && list2 != null) {
-        if (list1.val <= list2.val) {
-            curr.next = list1;
-            list1 = list1.next;
-        } else {
-            curr.next = list2;
-            list2 = list2.next;
-        }
-        curr = curr.next;
-    }
-    curr.next = (list1 != null) ? list1 : list2;
-    return dummy.next;
-}
-```
-
----
-
-### Q3: Reorder List (LC 143)
+### Q1: Reorder List (LC 143)
 **Example:** `1->2->3->4` -> `1->4->2->3`  
 **Pattern:** **Find Mid -> Reverse Second Half -> Merge**.
 
@@ -1147,7 +1258,7 @@ public void reorderList(ListNode head) {
 
 ---
 
-### Q4: Remove Nth Node From End of List (LC 19)
+### Q2: Remove Nth Node From End of List (LC 19)
 **Example:** `1->2->3->4->5, n = 2` -> `1->2->3->5`  
 **Pattern:** **Two Pointers with Gap**. Move `fast` $n$ steps ahead. Then move `slow` and `fast` until `fast.next` is null.
 
@@ -1173,7 +1284,7 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
 
 ---
 
-### Q5: Copy List with Random Pointer (LC 138)
+### Q3: Copy List with Random Pointer (LC 138)
 **Example:** List with `next` and `random` pointers.  
 **Pattern:** **Interweaving**. 1. Create copies and insert them next to original nodes. 2. Set random pointers for copies. 3. Separate lists. $O(1)$ space optimization over HashMap.
 
@@ -1209,7 +1320,7 @@ public Node copyRandomList(Node head) {
 
 ---
 
-### Q6: Add Two Numbers (LC 2)
+### Q4: Add Two Numbers (LC 2)
 **Example:** `(2->4->3) + (5->6->4)` -> `7->0->8` (342 + 465 = 807)  
 **Pattern:** **Elementary Math**. Iterate both lists, maintain a `carry`. Use `dummy` to build the result.
 
@@ -1236,24 +1347,7 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
 ---
 
-### Q7: Linked List Cycle (LC 141)
-**Pattern:** **Floyd's Tortoise and Hare**. Fast moves 2, Slow moves 1.
-
-```java
-public boolean hasCycle(ListNode head) {
-    ListNode slow = head, fast = head;
-    while (fast != null && fast.next != null) {
-        slow = slow.next;
-        fast = fast.next.next;
-        if (slow == fast) return true;
-    }
-    return false;
-}
-```
-
----
-
-### Q8: Find the Duplicate Number (LC 287)
+### Q5: Find the Duplicate Number (LC 287)
 **Example:** `[1,3,4,2,2]` -> `2`  
 **Pattern:** **Cycle Detection (Linked List cycle II)**. Treat array values as pointers (index $i$ points to $nums[i]$). The duplicate number is the entry point of the cycle.
 
@@ -1278,7 +1372,7 @@ public int findDuplicate(int[] nums) {
 
 ---
 
-### Q9: LRU Cache (LC 146)
+### Q6: LRU Cache (LC 146)
 **Explanation:** Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
 **Pattern:** **HashMap + Doubly Linked List**. HashMap for $O(1)$ lookups, DLL for $O(1)$ updates to the "Most Recently Used" position.
 
@@ -1329,7 +1423,7 @@ class LRUCache {
 
 ---
 
-### Q10: Merge K Sorted Lists (LC 23)
+### Q7: Merge K Sorted Lists (LC 23)
 **Example:** `[[1,4,5],[1,3,4],[2,6]]` -> `[1,1,2,3,4,4,5,6]`  
 **Pattern:** **PriorityQueue (Min-Heap)**. Add all heads to PQ. Repeatedly poll the min, add it to result, and add its `next` to PQ. $O(N \log K)$.
 
@@ -1352,7 +1446,7 @@ public ListNode mergeKLists(ListNode[] lists) {
 
 ---
 
-### Q11: Reverse Nodes in k-Group (LC 25)
+### Q8: Reverse Nodes in k-Group (LC 25)
 **Example:** `1->2->3->4->5, k = 2` -> `2->1->4->3->5`  
 **Pattern:** **Sub-list Reversal**. Find the $k$-th node. If it exists, reverse that segment. Connect the tail of the reversed segment to the result of the next recursive call.
 
@@ -1379,9 +1473,73 @@ public ListNode reverseKGroup(ListNode head, int k) {
     return head;
 }
 ```
+
 ---
 
-## 7. Trees
+### Q9: LFU Cache (LC 460)
+**Example:** Design and implement a data structure for a Least Frequently Used (LFU) cache with $O(1)$ operations.  
+**Explanation:** If capacity is reached, invalidate the least frequently used key. If tie, invalidate the least recently used key.
+
+**Pattern:** **Double Hash Map + LinkedHashSet / Doubly Linked List**.
+1. `keyToVal`: stores `key -> value`.
+2. `keyToFreq`: stores `key -> frequency`.
+3. `freqToKeys`: stores `frequency -> LinkedHashSet<Integer>` (maintains insertion order for LRU tie-breaker).
+4. `minFreq`: tracks global minimum frequency.
+
+```java
+class LFUCache {
+    private final int capacity;
+    private int minFreq;
+    private final Map<Integer, Integer> keyToVal = new HashMap<>();
+    private final Map<Integer, Integer> keyToFreq = new HashMap<>();
+    private final Map<Integer, LinkedHashSet<Integer>> freqToKeys = new HashMap<>();
+
+    public LFUCache(int capacity) {
+        this.capacity = capacity;
+        this.minFreq = 0;
+    }
+
+    public int get(int key) {
+        if (!keyToVal.containsKey(key)) return -1;
+        int freq = keyToFreq.get(key);
+        keyToFreq.put(key, freq + 1);
+
+        freqToKeys.get(freq).remove(key);
+        if (freq == minFreq && freqToKeys.get(freq).isEmpty()) {
+            minFreq++;
+        }
+        freqToKeys.computeIfAbsent(freq + 1, k -> new LinkedHashSet<>()).add(key);
+        return keyToVal.get(key);
+    }
+
+    public void put(int key, int value) {
+        if (capacity <= 0) return;
+
+        if (keyToVal.containsKey(key)) {
+            keyToVal.put(key, value);
+            get(key); // Updates frequency
+            return;
+        }
+
+        if (keyToVal.size() >= capacity) {
+            int evict = freqToKeys.get(minFreq).iterator().next();
+            freqToKeys.get(minFreq).remove(evict);
+            keyToVal.remove(evict);
+            keyToFreq.remove(evict);
+        }
+
+        keyToVal.put(key, value);
+        keyToFreq.put(key, 1);
+        minFreq = 1;
+        freqToKeys.computeIfAbsent(1, k -> new LinkedHashSet<>()).add(key);
+    }
+}
+```
+**Complexity:** $O(1)$ strictly for `get()` and `put()`, $O(\text{capacity})$ space.
+
+---
+
+## 8. Trees
 
 ### Core Theory & Patterns
 
@@ -1398,41 +1556,7 @@ public ListNode reverseKGroup(ListNode head, int k) {
     *   **Height:** Distance from node to furthest leaf (Bottom-up). Use recursion to return height up to parents.
 
 ---
-
-### Q1: Invert Binary Tree (LC 226)
-**Example:** `[4,2,7,1,3,6,9]` -> `[4,7,2,9,6,3,1]`  
-**Pattern:** Recursive swap.
-
-```java
-public TreeNode invertTree(TreeNode root) {
-    if (root == null) return null;
-    
-    // Swap children
-    TreeNode tmp = root.left;
-    root.left = root.right;
-    root.right = tmp;
-    
-    invertTree(root.left);
-    invertTree(root.right);
-    return root;
-}
-```
-
----
-
-### Q2: Maximum Depth of Binary Tree (LC 104)
-**Pattern:** **Bottom-up DFS**. The height of a node is `1 + max(leftHeight, rightHeight)`.
-
-```java
-public int maxDepth(TreeNode root) {
-    if (root == null) return 0;
-    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
-}
-```
-
----
-
-### Q3: Diameter of Binary Tree (LC 543)
+### Q1: Diameter of Binary Tree (LC 543)
 **Explanation:** Longest path between any two nodes. Path may or may not pass through root.
 
 **Pattern:** **Global Variable + Height DFS**. At each node, calculate height, but update a global `max` with `leftHeight + rightHeight`.
@@ -1456,66 +1580,7 @@ private int height(TreeNode node) {
 
 ---
 
-### Q4: Balanced Binary Tree (LC 110)
-**Explanation:** A tree is balanced if heights of left and right subtrees of *every* node differ by no more than 1.
-
-**Pattern:** **Sentinel Return Value**. Return `-1` if any subtree is unbalanced; otherwise return the height.
-
-```java
-public boolean isBalanced(TreeNode root) {
-    return dfs(root) != -1;
-}
-
-private int dfs(TreeNode root) {
-    if (root == null) return 0;
-    
-    int left = dfs(root.left);
-    if (left == -1) return -1;
-    
-    int right = dfs(root.right);
-    if (right == -1) return -1;
-    
-    if (Math.abs(left - right) > 1) return -1;
-    return 1 + Math.max(left, right);
-}
-```
-
----
-
-### Q5: Same Tree (LC 100)
-**Pattern:** Structural recursion. Both must be null, or both must have same val and matching children.
-
-```java
-public boolean isSameTree(TreeNode p, TreeNode q) {
-    if (p == null && q == null) return true;
-    if (p == null || q == null || p.val != q.val) return false;
-    
-    return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
-}
-```
-
----
-
-### Q6: Subtree of Another Tree (LC 572)
-**Pattern:** **Double Recursion**. For each node in `root`, check if `isSameTree(node, subRoot)`.
-
-```java
-public boolean isSubtree(TreeNode root, TreeNode subRoot) {
-    if (root == null) return false;
-    if (isSame(root, subRoot)) return true;
-    return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
-}
-
-private boolean isSame(TreeNode s, TreeNode t) {
-    if (s == null && t == null) return true;
-    if (s == null || t == null || s.val != t.val) return false;
-    return isSame(s.left, t.left) && isSame(s.right, t.right);
-}
-```
-
----
-
-### Q7: Lowest Common Ancestor of a BST (LC 235)
+### Q2: Lowest Common Ancestor of a BST (LC 235)
 **Pattern:** **BST Binary Search**. 
 *   If both values are smaller than `root`, LCA is in the left.
 *   If both are larger, LCA is in the right.
@@ -1533,7 +1598,7 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 
 ---
 
-### Q8: Binary Tree Level Order Traversal (LC 102)
+### Q3: Binary Tree Level Order Traversal (LC 102)
 **Pattern:** **Queue BFS**. Snapshot size at each level.
 
 ```java
@@ -1558,9 +1623,10 @@ public List<List<Integer>> levelOrder(TreeNode root) {
     return res;
 }
 ```
+
 ---
 
-### Q9: Binary Tree Right Side View (LC 199)
+### Q4: Binary Tree Right Side View (LC 199)
 **Example:** `root = [1,2,3,null,5,null,4]` -> `[1,3,4]`
 **Explanation:** Return the values of the nodes you can see when standing on the right side of the tree.
 
@@ -1589,7 +1655,7 @@ public List<Integer> rightSideView(TreeNode root) {
 
 ---
 
-### Q10: Count Good Nodes in Binary Tree (LC 1448)
+### Q5: Count Good Nodes in Binary Tree (LC 1448)
 **Example:** `root = [3,1,4,3,null,1,5]` -> `4`
 **Explanation:** A node is "good" if in the path from root to the node, there are no nodes with a value greater than its value.
 
@@ -1614,7 +1680,7 @@ private int dfs(TreeNode node, int maxSoFar) {
 
 ---
 
-### Q11: Validate Binary Search Tree (LC 98)
+### Q6: Validate Binary Search Tree (LC 98)
 **Pattern:** **Range Boundaries**. Every node must be strictly between a `min` and a `max`. Update these boundaries as you go left or right. Use `Long` to avoid issues with `Integer.MIN_VALUE`.
 
 ```java
@@ -1633,7 +1699,7 @@ private boolean validate(TreeNode node, long min, long max) {
 
 ---
 
-### Q12: Kth Smallest Element in a BST (LC 230)
+### Q7: Kth Smallest Element in a BST (LC 230)
 **Pattern:** **Iterative In-order Traversal**. In a BST, in-order gives values in ascending order. Use a stack to simulate the traversal and stop at the $k$-th element.
 
 ```java
@@ -1656,7 +1722,7 @@ public int kthSmallest(TreeNode root, int k) {
 
 ---
 
-### Q13: Construct Binary Tree from Preorder and Inorder Traversal (LC 105)
+### Q8: Construct Binary Tree from Preorder and Inorder Traversal (LC 105)
 **Pattern:** **Divide & Conquer + HashMap**. `preorder[0]` is always the root. Find its index in `inorder` to determine the size of left and right subtrees.
 
 ```java
@@ -1683,7 +1749,7 @@ private TreeNode helper(int[] preorder, int left, int right) {
 
 ---
 
-### Q14: Binary Tree Maximum Path Sum (LC 124)
+### Q9: Binary Tree Maximum Path Sum (LC 124)
 **Explanation:** Find the maximum path sum (can start and end at any node). 
 **Pattern:** **Post-order DFS**. At each node, calculate the max branch (left or right). Simultaneously, update a global max by considering a path that "peaks" at the current node.
 
@@ -1712,7 +1778,7 @@ private int dfs(TreeNode node) {
 
 ---
 
-### Q15: Serialize and Deserialize Binary Tree (LC 297)
+### Q10: Serialize and Deserialize Binary Tree (LC 297)
 **Pattern:** **DFS with String Joiner**. Use pre-order traversal for serialization. Use a `Queue` to rebuild the tree during deserialization.
 
 ```java
@@ -1736,9 +1802,102 @@ private TreeNode build(Queue<String> nodes) {
     return node;
 }
 ```
+
 ---
 
-## 8. Tries
+### Q11: Step-by-Step Directions From a Binary Tree Node to Another (LC 2096)
+**Example:** `root = [5,1,2,3,null,6,4], startValue = 3, destValue = 6` -> `"UURL"`  
+**Explanation:** Find the shortest path from `startValue` to `destValue`. Any move up is `'U'`, left is `'L'`, right is `'R'`.
+
+**Pattern:** **LCA Path Tracing**. 
+1. Find path from root to `start` (`startPath`) and root to `dest` (`destPath`).
+2. Remove common prefix (the LCA path).
+3. The remaining `startPath` represents upward steps to the LCA $\rightarrow$ convert all characters to `'U'`.
+4. Append the remaining `destPath`.
+
+```java
+public String getDirections(TreeNode root, int startValue, int destValue) {
+    StringBuilder sPath = new StringBuilder(), dPath = new StringBuilder();
+    findPath(root, startValue, sPath);
+    findPath(root, destValue, dPath);
+
+    int i = 0, maxCommon = Math.min(sPath.length(), dPath.length());
+    while (i < maxCommon && sPath.charAt(i) == dPath.charAt(i)) {
+        i++;
+    }
+
+    StringBuilder res = new StringBuilder();
+    for (int j = i; j < sPath.length(); j++) res.append('U');
+    res.append(dPath.substring(i));
+    return res.toString();
+}
+
+private boolean findPath(TreeNode node, int target, StringBuilder path) {
+    if (node == null) return false;
+    if (node.val == target) return true;
+
+    path.append('L');
+    if (findPath(node.left, target, path)) return true;
+    path.deleteCharAt(path.length() - 1);
+
+    path.append('R');
+    if (findPath(node.right, target, path)) return true;
+    path.deleteCharAt(path.length() - 1);
+
+    return false;
+}
+```
+**Complexity:** $O(N)$ time, $O(N)$ space.
+
+---
+
+### Q12: Binary Tree Cameras (LC 968)
+**Example:** Given binary tree, install minimum number of cameras such that all nodes are monitored.  
+**Explanation:** A camera monitors itself, its parent, and its immediate children.
+
+**Pattern:** **Greedy Post-order Tree DP**.
+Place cameras at parents of leaves, never at leaves!
+States for node:
+- `0`: Node is NOT covered (needs a camera).
+- `1`: Node has a camera installed.
+- `2`: Node is covered (no camera).
+
+```java
+class Solution {
+    private int cameras = 0;
+
+    public int minCameraCover(TreeNode root) {
+        if (dfs(root) == 0) cameras++; // Root remains uncovered
+        return cameras;
+    }
+
+    private int dfs(TreeNode node) {
+        if (node == null) return 2; // Null nodes are trivially covered
+
+        int left = dfs(node.left);
+        int right = dfs(node.right);
+
+        // If any child is uncovered, this node MUST have a camera
+        if (left == 0 || right == 0) {
+            cameras++;
+            return 1;
+        }
+
+        // If any child has a camera, this node is covered
+        if (left == 1 || right == 1) {
+            return 2;
+        }
+
+        // Both children are covered but have no camera -> this node is uncovered
+        return 0;
+    }
+}
+```
+**Complexity:** $O(N)$ time, $O(H)$ space.
+
+---
+
+## 9. Tries
 
 ### Core Theory & Patterns
 
@@ -1763,7 +1922,6 @@ class TrieNode {
 ```
 
 ---
-
 ### Q1: Implement Trie (Prefix Tree) (LC 208)
 **Example:**
 ```
@@ -1979,9 +2137,10 @@ class Solution {
     }
 }
 ```
+
 ---
 
-## 9. Graphs
+## 10. Graphs
 
 ### Core Theory & Patterns
 
@@ -1995,7 +2154,6 @@ class Solution {
 6.  **Multi-source BFS:** Instead of starting BFS from one node, add all "starting points" (e.g., all rotten oranges) to the queue initially.
 
 ---
-
 ### Q1: Number of Islands (LC 200)
 **Example:** `grid = [["1","1","0"],["1","1","0"],["0","0","1"]]` -> `2`  
 **Pattern:** **Grid DFS/BFS**. When you hit '1', increment count and sink the island (turn '1's to '0's) using recursion.
@@ -2264,7 +2422,154 @@ private int find(int[] parent, int i) {
 
 ---
 
-## 10. Advanced Graphs
+### Q11: Evaluate Division (LC 399)
+**Example:** `equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries = [["a","c"],["b","a"]]` -> `[6.0, 0.5]`  
+**Explanation:** Given equations $a / b = 2.0$ and $b / c = 3.0$, evaluate queries like $a / c$.
+
+**Pattern:** **Directed Weighted Graph Search (BFS/DFS)**.
+Vertices are variable names. Edge $u \to v$ with weight $w$ means $u / v = w$. Edge $v \to u$ with weight $1/w$. Query is finding product of edge weights along path from `src` to `dest`.
+
+```java
+public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+    Map<String, Map<String, Double>> graph = new HashMap<>();
+
+    for (int i = 0; i < equations.size(); i++) {
+        String u = equations.get(i).get(0), v = equations.get(i).get(1);
+        double val = values[i];
+        graph.computeIfAbsent(u, k -> new HashMap<>()).put(v, val);
+        graph.computeIfAbsent(v, k -> new HashMap<>()).put(u, 1.0 / val);
+    }
+
+    double[] res = new double[queries.size()];
+    for (int i = 0; i < queries.size(); i++) {
+        String src = queries.get(i).get(0), dest = queries.get(i).get(1);
+        if (!graph.containsKey(src) || !graph.containsKey(dest)) {
+            res[i] = -1.0;
+        } else if (src.equals(dest)) {
+            res[i] = 1.0;
+        } else {
+            res[i] = dfs(graph, src, dest, 1.0, new HashSet<>());
+        }
+    }
+    return res;
+}
+
+private double dfs(Map<String, Map<String, Double>> g, String curr, String target, double product, Set<String> visited) {
+    visited.add(curr);
+    Map<String, Double> neighbors = g.get(curr);
+    if (neighbors.containsKey(target)) {
+        return product * neighbors.get(target);
+    }
+
+    for (Map.Entry<String, Double> entry : neighbors.entrySet()) {
+        String next = entry.getKey();
+        if (!visited.contains(next)) {
+            double ans = dfs(g, next, target, product * entry.getValue(), visited);
+            if (ans != -1.0) return ans;
+        }
+    }
+    return -1.0;
+}
+```
+**Complexity:** $O(Q \times (V + E))$ time, $O(V + E)$ space.
+
+---
+
+### Q12: Word Ladder (LC 127)
+**Example:** `beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]` -> `5`  
+**Explanation:** Find the length of the shortest transformation sequence from `beginWord` to `endWord`.
+
+**Pattern:** **Bidirectional BFS**.
+Each word is a node. Words differing by 1 character have an edge. Expanding two smaller frontiers (`beginSet` and `endSet`) simultaneously reduces search space from $O(b^d)$ to $O(b^{d/2})$.
+
+```java
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+    Set<String> dict = new HashSet<>(wordList);
+    if (!dict.contains(endWord)) return 0;
+
+    Set<String> beginSet = new HashSet<>(), endSet = new HashSet<>();
+    beginSet.add(beginWord);
+    endSet.add(endWord);
+
+    int level = 1;
+    while (!beginSet.isEmpty() && !endSet.isEmpty()) {
+        // Always expand the smaller set
+        if (beginSet.size() > endSet.size()) {
+            Set<String> temp = beginSet; beginSet = endSet; endSet = temp;
+        }
+
+        Set<String> nextLevel = new HashSet<>();
+        for (String word : beginSet) {
+            char[] chars = word.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                char old = chars[i];
+                for (char c = 'a'; c <= 'z'; c++) {
+                    chars[i] = c;
+                    String next = String.valueOf(chars);
+                    if (endSet.contains(next)) return level + 1;
+                    if (dict.contains(next)) {
+                        nextLevel.add(next);
+                        dict.remove(next); // Mark visited
+                    }
+                }
+                chars[i] = old;
+            }
+        }
+        beginSet = nextLevel;
+        level++;
+    }
+    return 0;
+}
+```
+**Complexity:** $O(M^2 \times N)$ where $M$ is word length and $N$ is word count.
+
+---
+
+### Q13: Shortest Path in a Grid with Obstacles Elimination (LC 1293)
+**Example:** `grid = [[0,0,0],[1,1,0],[0,0,0]], k = 1` -> `6`  
+**Explanation:** Find minimum steps to reach bottom-right corner, given you can eliminate at most $k$ obstacles.
+
+**Pattern:** **3D State-Space BFS `(row, col, remaining_k)`**.
+Track the maximum remaining eliminations seen for each cell: `visited[r][c] = maxK`. If reached with fewer or equal $k$, prune.
+
+```java
+public int shortestPath(int[][] grid, int k) {
+    int m = grid.length, n = grid[0].length;
+    if (k >= m + n - 2) return m + n - 2; // Manhattan shortcut
+
+    int[][] visited = new int[m][n];
+    for (int[] row : visited) Arrays.fill(row, -1);
+
+    Queue<int[]> q = new ArrayDeque<>();
+    q.offer(new int[]{0, 0, k, 0}); // {r, c, k, steps}
+    visited[0][0] = k;
+
+    int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    while (!q.isEmpty()) {
+        int[] curr = q.poll();
+        int r = curr[0], c = curr[1], remK = curr[2], steps = curr[3];
+        if (r == m - 1 && c == n - 1) return steps;
+
+        for (int[] d : dirs) {
+            int nr = r + d[0], nc = c + d[1];
+            if (nr < 0 || nr >= m || nc < 0 || nc >= n) continue;
+
+            int nextK = remK - grid[nr][nc];
+            if (nextK >= 0 && nextK > visited[nr][nc]) {
+                visited[nr][nc] = nextK;
+                q.offer(new int[]{nr, nc, nextK, steps + 1});
+            }
+        }
+    }
+    return -1;
+}
+```
+**Complexity:** $O(M \times N \times K)$ time, $O(M \times N \times K)$ space.
+
+---
+
+## 11. Advanced Graphs
 
 ### Core Theory & Patterns
 
@@ -2279,7 +2584,6 @@ private int find(int[] parent, int i) {
 5.  **Graph Representation:** For weighted graphs, use `Map<Integer, List<int[]>>` where `int[]` is `[neighbor, weight]`.
 
 ---
-
 ### Q1: Network Delay Time (LC 743)
 **Example:** `times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2` -> `2`  
 **Explanation:** Send a signal from node `k`. Find the minimum time it takes for all `n` nodes to receive the signal. If not all nodes can receive the signal, return -1.
@@ -2607,9 +2911,10 @@ public int minCostConnectPoints(int[][] points) {
     return minCost;
 }
 ```
+
 ---
 
-## 11. Dynamic Programming (1-D)
+## 12. Dynamic Programming (1-D)
 
 ### Core Theory & Patterns
 
@@ -2620,42 +2925,7 @@ public int minCostConnectPoints(int[][] points) {
 5.  **Space Optimization:** If `dp[i]` only depends on `dp[i-1]` and `dp[i-2]`, you don't need an $O(N)$ array. Use two variables to achieve **$O(1)$ space**.
 
 ---
-
-### Q1: Climbing Stairs (LC 70)
-**Example:** `n = 3` -> `3` (1+1+1, 1+2, 2+1)  
-**Pattern:** **Fibonacci**. To reach step $i$, you must come from $i-1$ or $i-2$.
-
-```java
-public int climbStairs(int n) {
-    if (n <= 2) return n;
-    int one = 1, two = 2; // Steps for n-2 and n-1
-    for (int i = 3; i <= n; i++) {
-        int temp = one + two;
-        one = two;
-        two = temp;
-    }
-    return two;
-}
-```
-
----
-
-### Q2: Min Cost Climbing Stairs (LC 746)
-**Pattern:** **Greedy + DP**. At each step, the cost is `cost[i] + min(dp[i-1], dp[i-2])`.
-
-```java
-public int minCostClimbingStairs(int[] cost) {
-    int n = cost.length;
-    for (int i = 2; i < n; i++) {
-        cost[i] += Math.min(cost[i - 1], cost[i - 2]);
-    }
-    return Math.min(cost[n - 1], cost[n - 2]);
-}
-```
-
----
-
-### Q3: House Robber (LC 198)
+### Q1: House Robber (LC 198)
 **Pattern:** **Select vs. Skip**. `dp[i] = max(rob current + dp[i-2], rob previous)`.
 
 ```java
@@ -2673,7 +2943,7 @@ public int rob(int[] nums) {
 
 ---
 
-### Q4: House Robber II (LC 213)
+### Q2: House Robber II (LC 213)
 **Explanation:** Houses are in a circle (1st and last are neighbors).  
 **Pattern:** **Conditional DP**. Run `House Robber` twice: once excluding the first house, once excluding the last. Return the max of both.
 
@@ -2697,7 +2967,7 @@ private int robRange(int[] nums, int start, int end) {
 
 ---
 
-### Q5: Longest Palindromic Substring (LC 5)
+### Q3: Longest Palindromic Substring (LC 5)
 **Pattern:** **Expand Around Center**. For every character (and every space between characters), expand outward as long as it's a palindrome. $O(N^2)$ time, $O(1)$ space.
 
 ```java
@@ -2724,7 +2994,7 @@ private String expand(String s, int l, int r) {
 
 ---
 
-### Q6: Palindromic Substrings (LC 647)
+### Q4: Palindromic Substrings (LC 647)
 **Pattern:** **Center Expansion Count**. Same as Q5, but return the total count of valid expansions.
 
 ```java
@@ -2748,7 +3018,7 @@ private int countPal(String s, int l, int r) {
 
 ---
 
-### Q7: Decode Ways (LC 91)
+### Q5: Decode Ways (LC 91)
 **Example:** `"12"` -> `2` (A-B "1-2" or L "12")  
 **Pattern:** **Conditional Fibonacci**. $dp[i]$ depends on $dp[i-1]$ (if valid single digit) and $dp[i-2]$ (if valid two-digit number between 10-26).
 
@@ -2772,7 +3042,7 @@ public int numDecodings(String s) {
 
 ---
 
-### Q8: Coin Change (LC 322)
+### Q6: Coin Change (LC 322)
 **Pattern:** **Unbounded Knapsack**. $dp[amount] = \min(dp[amount], 1 + dp[amount - coin])$. Initialize with `amount + 1` (acting as infinity).
 
 ```java
@@ -2794,7 +3064,7 @@ public int coinChange(int[] coins, int amount) {
 
 ---
 
-### Q9: Maximum Product Subarray (LC 152)
+### Q7: Maximum Product Subarray (LC 152)
 **Pattern:** **Dual-State DP**. Because of negative numbers, keep track of both the `currentMax` and `currentMin` product ending at index $i$.
 
 ```java
@@ -2814,7 +3084,7 @@ public int maxProduct(int[] nums) {
 
 ---
 
-### Q10: Word Break (LC 139)
+### Q8: Word Break (LC 139)
 **Pattern:** **Linear DP with Substrings**. $dp[i]$ is true if the prefix $s[0...i]$ can be segmented. To check $dp[i]$, look at all previous $dp[j]$ where $j < i$ and check if $s[j...i]$ is in the dictionary.
 
 ```java
@@ -2834,9 +3104,10 @@ public boolean wordBreak(String s, List<String> wordDict) {
     return dp[s.length()];
 }
 ```
+
 ---
 
-### Q11: Longest Increasing Subsequence (LC 300)
+### Q9: Longest Increasing Subsequence (LC 300)
 **Example:** `nums = [10,9,2,5,3,7,101,18]` -> `4` ([2,3,7,18])
 **Pattern:** **LIS DP**. For every $i$, look at all $j < i$. If `nums[i] > nums[j]`, then `dp[i] = max(dp[i], 1 + dp[j])`.
 
@@ -2860,7 +3131,7 @@ public int lengthOfLIS(int[] nums) {
 
 ---
 
-### Q12: Partition Equal Subset Sum (LC 416)
+### Q10: Partition Equal Subset Sum (LC 416)
 **Pattern:** **0/1 Knapsack (Subset Sum)**. Can we find a subset that sums to `totalSum / 2`? Use a `HashSet` to store possible sums or a 1D boolean array (iterating backwards to avoid using the same element twice).
 
 ```java
@@ -2885,7 +3156,7 @@ public boolean canPartition(int[] nums) {
 
 ---
 
-## 12. Dynamic Programming (2-D)
+## 13. Dynamic Programming (2-D)
 
 ### Core Theory & Patterns
 
@@ -2896,7 +3167,6 @@ public boolean canPartition(int[] nums) {
 3.  **Space Compression:** Since `dp[i]` often only depends on `dp[i-1]`, you can reduce $O(M \times N)$ space to $O(N)$ by using two rows or updating a single row in-place.
 
 ---
-
 ### Q1: Unique Paths (LC 62)
 **Example:** `m = 3, n = 7` -> `28`
 **Pattern:** **Grid DP**. $dp[r][c] = dp[r-1][c] + dp[r][c-1]$. You can only arrive from the top or the left.
@@ -2917,7 +3187,7 @@ public int uniquePaths(int m, int n) {
 
 ---
 
-### Q14: Longest Common Subsequence (LC 1143)
+### Q2: Longest Common Subsequence (LC 1143)
 **Pattern:** **2D String DP**. If `s1[i] == s2[j]`, take $1 +$ diagonal. Else, take `max(top, left)`.
 
 ```java
@@ -2939,7 +3209,7 @@ public int longestCommonSubsequence(String text1, String text2) {
 
 ---
 
-### Q15: Best Time to Buy and Sell Stock with Cooldown (LC 309)
+### Q3: Best Time to Buy and Sell Stock with Cooldown (LC 309)
 **Pattern:** **State Machine DP**. States: `Buying`, `Selling`. If you sell, the next state *must* be a cooldown day (skip index+2).
 
 ```java
@@ -2968,7 +3238,7 @@ private int dfs(int i, boolean buying, int[] prices, Map<String, Integer> memo) 
 
 ---
 
-### Q16: Coin Change II (LC 518)
+### Q4: Coin Change II (LC 518)
 **Pattern:** **2D Unbounded Knapsack**. Number of combinations. $dp[i] += dp[i - coin]$.
 
 ```java
@@ -2986,7 +3256,7 @@ public int change(int amount, int[] coins) {
 
 ---
 
-### Q17: Target Sum (LC 494)
+### Q5: Target Sum (LC 494)
 **Pattern:** **0/1 Knapsack**. Find number of ways to assign +/- to reach target. This is equivalent to finding a subset with sum $(target + totalSum) / 2$.
 
 ```java
@@ -3007,7 +3277,7 @@ public int findTargetSumWays(int[] nums, int target) {
 
 ---
 
-### Q18: Interleaving String (LC 97)
+### Q6: Interleaving String (LC 97)
 **Pattern:** **2D Grid Path**. $dp[i][j]$ is true if `s3[i+j]` can be formed by `s1[i]` or `s2[j]`.
 
 ```java
@@ -3028,7 +3298,7 @@ public boolean isInterleave(String s1, String s2, String s3) {
 
 ---
 
-### Q19: Edit Distance (LC 72)
+### Q7: Edit Distance (LC 72)
 **Pattern:** **2D String DP**. 
 *   If match: `dp[i-1][j-1]`.
 *   If mismatch: $1 + \min(\text{insert, delete, replace})$.
@@ -3053,9 +3323,10 @@ public int minDistance(String word1, String word2) {
     return dp[m][n];
 }
 ```
+
 ---
 
-### Q20: Longest Increasing Path in a Matrix (LC 329)
+### Q8: Longest Increasing Path in a Matrix (LC 329)
 **Example:** `matrix = [[9,9,4],[6,6,8],[2,1,1]]` -> `4` ([1, 2, 6, 9])  
 **Explanation:** Find the length of the longest increasing path in an $m \times n$ integers matrix.
 
@@ -3090,7 +3361,7 @@ private int dfs(int[][] matrix, int r, int c, int prevVal, int[][] memo) {
 
 ---
 
-### Q21: Distinct Subsequences (LC 115)
+### Q9: Distinct Subsequences (LC 115)
 **Example:** `s = "rabbbit", t = "rabbit"` -> `3`  
 **Explanation:** Count how many ways string `t` can be formed as a subsequence of `s`.
 
@@ -3119,7 +3390,7 @@ public int numDistinct(String s, String t) {
 
 ---
 
-### Q22: Burst Balloons (LC 312)
+### Q10: Burst Balloons (LC 312)
 **Example:** `nums = [3,1,5,8]` -> `167`  
 **Explanation:** Burst balloons to maximize coins. If you burst `i`, you get `nums[left] * nums[i] * nums[right]`.
 
@@ -3149,7 +3420,7 @@ public int maxCoins(int[] nums) {
 
 ---
 
-### Q23: Regular Expression Matching (LC 10)
+### Q11: Regular Expression Matching (LC 10)
 **Example:** `s = "aa", p = "a*"` -> `true`  
 **Explanation:** Support `.` (any char) and `*` (zero or more of the preceding element).
 
@@ -3188,7 +3459,7 @@ public boolean isMatch(String s, String p) {
 
 ---
 
-## 13. Heaps / Priority Queue
+## 14. Heaps / Priority Queue
 
 ### Core Theory & Patterns
 
@@ -3202,7 +3473,6 @@ public boolean isMatch(String s, String p) {
 6.  **Java Implementation:** Always use `PriorityQueue<T>`. For a Max-Heap, use `new PriorityQueue<>(Collections.reverseOrder())` or a custom comparator `(a, b) -> b - a`.
 
 ---
-
 ### Q1: Kth Largest Element in a Stream (LC 703)
 **Pattern:** **Fixed-Size Min-Heap**. Maintain a Min-Heap of size $K$. The root will always be the $K$-th largest element.
 
@@ -3227,24 +3497,7 @@ class KthLargest {
 
 ---
 
-### Q2: Last Stone Weight (LC 1046)
-**Pattern:** **Max-Heap Simulation**. Always smash the two heaviest stones.
-
-```java
-public int lastStoneWeight(int[] stones) {
-    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
-    for (int s : stones) maxHeap.add(s);
-    
-    while (maxHeap.size() > 1) {
-        int stone1 = maxHeap.poll();
-        int stone2 = maxHeap.poll();
-        if (stone1 != stone2) maxHeap.add(stone1 - stone2);
-    }
-    return maxHeap.isEmpty() ? 0 : maxHeap.peek();
-}
-```
-
-### Q3: K Closest Points to Origin (LC 973)
+### Q2: K Closest Points to Origin (LC 973)
 **Pattern:** **Max-Heap of size K**. To find the $K$ closest (smallest) distances, maintain a Max-Heap. When the size exceeds $K$, remove the largest distance.
 
 ```java
@@ -3267,7 +3520,7 @@ public int[][] kClosest(int[][] points, int k) {
 
 ---
 
-### Q4: Kth Largest Element in an Array (LC 215)
+### Q3: Kth Largest Element in an Array (LC 215)
 **Pattern:** **Min-Heap**. Similar to Q1, maintain a Min-Heap of size $K$. This is $O(N \log K)$.
 
 ```java
@@ -3283,7 +3536,7 @@ public int findKthLargest(int[] nums, int k) {
 
 ---
 
-### Q5: Task Scheduler (LC 621)
+### Q4: Task Scheduler (LC 621)
 **Pattern:** **Frequency Map + Max-Heap + Queue**. Use Max-Heap for highest frequency tasks and a Queue to track tasks in the cooldown period.
 
 ```java
@@ -3314,7 +3567,7 @@ public int leastInterval(char[] tasks, int n) {
 
 ---
 
-### Q6: Design Twitter (LC 355)
+### Q5: Design Twitter (LC 355)
 **Pattern:** **Hashing + Merging K-Sorted Lists**. Track follows/tweets in Maps. Feed generation uses a Min-Heap to pick the 10 most recent tweets from multiple lists.
 
 ```java
@@ -3359,7 +3612,7 @@ class Twitter {
 
 ---
 
-### Q7: Find Median from Data Stream (LC 295)
+### Q6: Find Median from Data Stream (LC 295)
 **Pattern:** **Two Heaps**. `small` (Max-Heap) for the left half, `large` (Min-Heap) for the right half.
 
 ```java
@@ -3388,9 +3641,67 @@ class MedianFinder {
     }
 }
 ```
+
 ---
 
-## 14. Greedy
+### Q7: Snapshot Array (LC 1146)
+**Example:** Support `set(index, val)`, `snap()` (returns `snap_id`), and `get(index, snap_id)`.  
+**Explanation:** Frequently asked at Google. Must record full snapshots without copying array memory.
+
+**Pattern:** **Historical Versioning via Binary Search**.
+For each index, maintain a list of `(snapId, val)` historical records.
+`get(index, snapId)` searches the rightmost record with `record.snapId <= targetSnapId` using binary search.
+
+```java
+class SnapshotArray {
+    private List<int[]>[] history;
+    private int snapId = 0;
+
+    public SnapshotArray(int length) {
+        history = new List[length];
+        for (int i = 0; i < length; i++) {
+            history[i] = new ArrayList<>();
+            history[i].add(new int[]{0, 0}); // {snapId, val}
+        }
+    }
+
+    public void set(int index, int val) {
+        List<int[]> records = history[index];
+        int lastIdx = records.size() - 1;
+        if (records.get(lastIdx)[0] == snapId) {
+            records.get(lastIdx)[1] = val; // Overwrite within same snapshot
+        } else {
+            records.add(new int[]{snapId, val});
+        }
+    }
+
+    public int snap() {
+        return snapId++;
+    }
+
+    public int get(int index, int snap_id) {
+        List<int[]> records = history[index];
+        int l = 0, r = records.size() - 1;
+        int ans = 0;
+
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if (records.get(mid)[0] <= snap_id) {
+                ans = records.get(mid)[1];
+                l = mid + 1; // Look for later valid record
+            } else {
+                r = mid - 1;
+            }
+        }
+        return ans;
+    }
+}
+```
+**Complexity:** `set()` $O(1)$, `snap()` $O(1)$, `get()` $O(\log(\text{updates}))$, Space $O(\text{updates})$.
+
+---
+
+## 15. Greedy
 
 ### Core Theory & Patterns
 
@@ -3401,7 +3712,6 @@ class MedianFinder {
 5.  **Priority Queues:** Used when the "best local choice" isn't immediately obvious from sorting, but needs to be dynamically selected (e.g., always picking the smallest available item).
 
 ---
-
 ### Q1: Jump Game (LC 55)
 **Example:** `nums = [2,3,1,1,4]` -> `true`  
 **Explanation:** Determine if you can reach the last index.
@@ -3536,6 +3846,8 @@ public boolean mergeTriplets(int[][] triplets, int[] target) {
 }
 ```
 
+---
+
 ### Q6: Partition Labels (LC 763)
 **Example:** `triplets = [[2,5,3],[1,8,4],[1,7,5]], target = [2,7,5]` -> `true`  
 **Explanation:** You are given an array of `triplets` and a `target` triplet. You can merge two triplets `[a,b,c]` and `[d,e,f]` into `[max(a,d), max(b,e), max(c,f)]`. Return `true` if you can obtain the `target` triplet.
@@ -3560,6 +3872,8 @@ public List<Integer> partitionLabels(String s) {
 }
 ```
 
+---
+
 ### Q7: Valid Parenthesis String (LC 678)
 **Example:** `triplets = [[2,5,3],[1,8,4],[1,7,5]], target = [2,7,5]` -> `true`  
 **Explanation:** You are given an array of `triplets` and a `target` triplet. You can merge two triplets `[a,b,c]` and `[d,e,f]` into `[max(a,d), max(b,e), max(c,f)]`. Return `true` if you can obtain the `target` triplet.
@@ -3583,7 +3897,7 @@ public boolean checkValidString(String s) {
 
 ---
 
-## 15. Backtracking
+## 16. Backtracking
 
 ### Core Theory & Patterns
 
@@ -3597,7 +3911,6 @@ public boolean checkValidString(String s) {
 5.  **State Management:** Always "Undo" the change after the recursive call (e.g., `list.remove(list.size() - 1)` or `visited[r][c] = false`) to restore the state for the next branch.
 
 ---
-
 ### Q1: Subsets (LC 78)
 **Example:** `nums = [1,2,3]` -> `[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]`  
 **Pattern:** **Pick / Not Pick**. At each index, decide whether to include the element.
@@ -3781,6 +4094,7 @@ private boolean backtrack(char[][] board, String word, int r, int c, int i) {
     return found;
 }
 ```
+
 ---
 
 ### Q7: Palindrome Partitioning (LC 131)
@@ -3998,9 +4312,10 @@ private void backtrack(int start, int target, int k, List<Integer> curr, List<Li
     }
 }
 ```
+
 ---
 
-## 16. Intervals
+## 17. Intervals
 
 ### Core Theory & Patterns
 
@@ -4014,7 +4329,6 @@ private void backtrack(int start, int target, int k, List<Integer> curr, List<Li
 5.  **Chronological Ordering:** For "Meeting Rooms II" (simultaneous intervals), treat starts and ends as separate events on a timeline.
 
 ---
-
 ### Q1: Insert Interval (LC 57)
 **Example:** `intervals = [[1,3],[6,9]], newInterval = [2,5]` -> `[[1,5],[6,9]]`  
 **Explanation:** Insert a new interval into a sorted list and merge if necessary.
@@ -4101,23 +4415,7 @@ public int eraseOverlapIntervals(int[][] intervals) {
 
 ---
 
-### Q4: Meeting Rooms (LC 252)
-**Explanation:** Can a person attend all meetings? (Check for any overlap).
-**Pattern:** Sort by start, check if `next.start < curr.end`.
-
-```java
-public boolean canAttendMeetings(int[][] intervals) {
-    Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
-    for (int i = 1; i < intervals.length; i++) {
-        if (intervals[i][0] < intervals[i-1][1]) return false;
-    }
-    return true;
-}
-```
-
----
-
-### Q5: Meeting Rooms II (LC 253)
+### Q4: Meeting Rooms II (LC 253)
 **Explanation:** Minimum number of rooms required.
 **Pattern:** **Chronological Ordering**. Separate start times and end times into two sorted arrays. Iterate through starts; if a meeting starts before the earliest ending one finishes, you need a new room.
 
@@ -4149,7 +4447,7 @@ public int minMeetingRooms(int[][] intervals) {
 
 ---
 
-### Q6: Minimum Number of Arrows to Burst Balloons (LC 452)
+### Q5: Minimum Number of Arrows to Burst Balloons (LC 452)
 **Example:** `[[10,16],[2,8],[1,6],[7,12]]` -> `2`  
 **Pattern:** **Intersection Greedy**. Similar to Non-overlapping intervals. Sort by end time. If the current balloon starts after the last arrow position, you need a new arrow.
 
@@ -4171,9 +4469,76 @@ public int findMinArrowShots(int[][] points) {
     return arrows;
 }
 ```
+
 ---
 
-## 17. Math & Geometry
+### Q6: My Calendar I & II (LC 729 & LC 731)
+**Example:** Book event $[start, end)$ such that no triple booking occurs.  
+**Explanation:** Classic Google interview problem on dynamic sweep line / interval collision.
+
+**Pattern:** **Sweep Line with TreeMap**.
+Add `+1` at `start`, `-1` at `end`. Iterate TreeMap entries; if running count reaches $3$, rollback and reject booking.
+
+```java
+class MyCalendarTwo {
+    private TreeMap<Integer, Integer> delta = new TreeMap<>();
+
+    public boolean book(int start, int end) {
+        delta.put(start, delta.getOrDefault(start, 0) + 1);
+        delta.put(end, delta.getOrDefault(end, 0) - 1);
+
+        int active = 0;
+        for (int count : delta.values()) {
+            active += count;
+            if (active >= 3) { // Triple booking!
+                delta.put(start, delta.get(start) - 1);
+                delta.put(end, delta.get(end) + 1);
+                if (delta.get(start) == 0) delta.remove(start);
+                if (delta.get(end) == 0) delta.remove(end);
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+**Complexity:** $O(N)$ per booking, $O(N)$ space.
+
+---
+
+### Q7: Employee Free Time (LC 759)
+**Example:** Given working schedule of $N$ employees, return all common free time intervals.  
+**Explanation:** Find intervals where all employees are simultaneously free.
+
+**Pattern:** **Flatten Intervals + Interval Merging**.
+1. Flatten all employee work intervals into one list.
+2. Sort intervals by start time.
+3. Merge overlapping work intervals. Any gap between consecutive merged intervals is employee free time!
+
+```java
+public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
+    List<Interval> all = new ArrayList<>();
+    for (List<Interval> emp : schedule) all.addAll(emp);
+
+    all.sort(Comparator.comparingInt(a -> a.start));
+
+    List<Interval> free = new ArrayList<>();
+    int prevEnd = all.get(0).end;
+
+    for (Interval curr : all) {
+        if (curr.start > prevEnd) {
+            free.add(new Interval(prevEnd, curr.start)); // Gap found
+        }
+        prevEnd = Math.max(prevEnd, curr.end);
+    }
+    return free;
+}
+```
+**Complexity:** $O(N \log N)$ time, $O(N)$ space.
+
+---
+
+## 18. Math & Geometry
 
 ### Core Theory & Patterns
 
@@ -4187,7 +4552,6 @@ public int findMinArrowShots(int[][] points) {
 6.  **Cycle Detection (Math):** For sequences like Happy Number, use Floyd's Tortoise and Hare (Slow/Fast pointers) to detect if the sequence loops infinitely.
 
 ---
-
 ### Q1: Rotate Image (LC 48)
 **Example:** `[[1,2],[3,4]]` -> `[[3,1],[4,2]]`  
 **Pattern:** **Transpose + Reflect**. Transpose flips over the main diagonal. Reflecting (reversing rows) completes the 90-degree turn.
@@ -4277,54 +4641,7 @@ public void setZeroes(int[][] matrix) {
 
 ---
 
-### Q4: Happy Number (LC 202)
-**Pattern:** **Cycle Detection**. A number is happy if the sum of squares of digits eventually hits 1. If it hits a cycle, it's not. Use Tortoise & Hare logic.
-
-```java
-public boolean isHappy(int n) {
-    int slow = n, fast = sumSquares(n);
-    while (slow != fast) {
-        slow = sumSquares(slow);
-        fast = sumSquares(sumSquares(fast));
-    }
-    return slow == 1;
-}
-
-private int sumSquares(int n) {
-    int sum = 0;
-    while (n > 0) {
-        int digit = n % 10;
-        sum += digit * digit;
-        n /= 10;
-    }
-    return sum;
-}
-```
-
----
-
-### Q5: Plus One (LC 66)
-**Pattern:** **Reverse Iteration**. If a digit is less than 9, increment and return. If it's 9, it becomes 0 and carry moves to the next digit.
-
-```java
-public int[] plusOne(int[] digits) {
-    for (int i = digits.length - 1; i >= 0; i--) {
-        if (digits[i] < 9) {
-            digits[i]++;
-            return digits;
-        }
-        digits[i] = 0;
-    }
-    // If loop finishes, it means we had something like [9,9,9]
-    int[] res = new int[digits.length + 1];
-    res[0] = 1;
-    return res;
-}
-```
-
----
-
-### Q6: Pow(x, n) (LC 50)
+### Q4: Pow(x, n) (LC 50)
 **Pattern:** **Binary Exponentiation**. Recursively (or iteratively) square the base while halving the exponent.
 
 ```java
@@ -4343,7 +4660,7 @@ public double myPow(double x, int n) {
 
 ---
 
-### Q7: Multiply Strings (LC 43)
+### Q5: Multiply Strings (LC 43)
 **Pattern:** **Digit-by-Digit Multiplication**. Multiply $num1[i]$ and $num2[j]$ and store in result array at index $i+j+1$.
 
 ```java
@@ -4370,7 +4687,7 @@ public String multiply(String num1, String num2) {
 
 ---
 
-### Q8: Detect Squares (LC 2013)
+### Q6: Detect Squares (LC 2013)
 **Pattern:** **Coordinate Hashing**. To find squares forming with point $(x, y)$, iterate through existing points $(x_i, y_i)$ that could be the opposite diagonal corner (check if absolute differences match).
 
 ```java
@@ -4399,9 +4716,10 @@ class DetectSquares {
     }
 }
 ```
+
 ---
 
-## 18. Bit Manipulation
+## 19. Bit Manipulation
 
 ### Core Theory & Patterns
 
@@ -4418,38 +4736,7 @@ class DetectSquares {
 5.  **Two's Complement:** In Java, negative numbers are stored as `~n + 1`. The sign bit is the most significant bit.
 
 ---
-
-### Q1: Single Number (LC 136)
-**Example:** `[4,1,2,1,2]` -> `4`  
-**Pattern:** **XOR Accumulator**. Since `x^x = 0`, all numbers appearing twice will cancel each other out, leaving only the unique number.
-
-```java
-public int singleNumber(int[] nums) {
-    int res = 0;
-    for (int n : nums) res ^= n;
-    return res;
-}
-```
-
----
-
-### Q2: Number of 1 Bits (LC 191)
-**Pattern:** **Kernighan’s Algorithm**. Instead of checking all 32 bits, only iterate as many times as there are set bits using `n & (n - 1)`.
-
-```java
-public int hammingWeight(int n) {
-    int count = 0;
-    while (n != 0) {
-        n &= (n - 1); // Removes the rightmost 1-bit
-        count++;
-    }
-    return count;
-}
-```
-
----
-
-### Q3: Counting Bits (LC 338)
+### Q1: Counting Bits (LC 338)
 **Example:** `n = 2` -> `[0,1,1]` (binary 0, 1, 10)  
 **Pattern:** **DP + Offset**. The number of bits in $i$ is $1 + \text{bits in } (i - \text{LargestPowerOf2})$.
 **Alternative Pattern:** `dp[i] = dp[i >> 1] + (i & 1)`. The bits in $i$ are the bits in $i/2$ plus 1 if $i$ is odd.
@@ -4466,75 +4753,3 @@ public int[] countBits(int n) {
 ```
 
 ---
-
-### Q4: Reverse Bits (LC 190)
-**Pattern:** **Bit-by-Bit Shift**. Iterate 32 times. Shift result left, add the last bit of $n$ to the result, then shift $n$ right.
-
-```java
-public int reverseBits(int n) {
-    int res = 0;
-    for (int i = 0; i < 32; i++) {
-        res = (res << 1) | (n & 1); // Shift result left, add n's LSB
-        n >>= 1; // Move to n's next bit
-    }
-    return res;
-}
-```
-
----
-
-### Q5: Missing Number (LC 268)
-**Example:** `nums = [3,0,1]` -> `2` (range is 0 to 3)  
-**Pattern:** **XOR Index and Value**. XOR all numbers from $0$ to $n$ and all numbers in the array. The matching pairs will cancel out, leaving the missing number.
-
-```java
-public int missingNumber(int[] nums) {
-    int res = nums.length; // Start with n
-    for (int i = 0; i < nums.length; i++) {
-        res ^= i ^ nums[i]; // XOR index and value
-    }
-    return res;
-}
-```
-
----
-
-### Q6: Sum of Two Integers (LC 371)
-**Explanation:** Sum two integers without using `+` or `-`.
-**Pattern:** **XOR for Sum, AND-Shift for Carry**. 
-*   `a ^ b` calculates the sum without carrying.
-*   `(a & b) << 1` calculates the carry.
-
-```java
-public int getSum(int a, int b) {
-    while (b != 0) {
-        int carry = (a & b) << 1;
-        a = a ^ b; // Sum without carry
-        b = carry; // Continue until no carry left
-    }
-    return a;
-}
-```
-
----
-
-### Q7: Reverse Integer (LC 7)
-**Example:** `-123` -> `-321`  
-**Pattern:** **Overflow Check**. While popping digits using `% 10`, check if the result will exceed `Integer.MAX_VALUE / 10` before multiplying by 10.
-
-```java
-public int reverse(int x) {
-    int res = 0;
-    while (x != 0) {
-        int pop = x % 10;
-        x /= 10;
-        
-        // Check for positive/negative overflow
-        if (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && pop > 7)) return 0;
-        if (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && pop < -8)) return 0;
-        
-        res = res * 10 + pop;
-    }
-    return res;
-}
-```
