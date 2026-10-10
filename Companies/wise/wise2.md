@@ -563,3 +563,277 @@ public class RateLimiter {
 **Follow-up: How do I test this implementation in Java?**
 - **Basic Limits:** Assert that requesting more than `maxTokens` in a tight loop eventually returns `false`.
 - **Refill Delay:** Simulate a thread sleep, then assert the next request returns `true`.
+
+---
+
+## 9. Implement a Circuit Breaker Pattern (Alternative - Lock-free)
+
+A production-grade circuit breaker must be thread-safe, manage its own state transitions (CLOSED, OPEN, HALF_OPEN), and prevent cascading downstream failures. This implementation uses atomic variables to avoid global synchronized blocks, ensuring high throughput.
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
+
+public class CircuitBreaker {
+    public enum State { CLOSED, OPEN, HALF_OPEN }
+    
+    private final AtomicReference<State> state = new AtomicReference<>(State.CLOSED);
+    private final AtomicInteger failureCount = new AtomicInteger(0);
+    private volatile long openTimestamp = 0; // volatile for visibility across threads
+    
+    private final int failureThreshold;
+    private final long timeoutMillis;
+
+    public CircuitBreaker(int failureThreshold, long timeoutMillis) {
+        this.failureThreshold = failureThreshold;
+        this.timeoutMillis = timeoutMillis;
+    }
+
+    public <T> T execute(Supplier<T> action) {
+        evaluateStateTransition();
+        
+        if (state.get() == State.OPEN) {
+            throw new CircuitBreakerOpenException("Circuit is OPEN. Fast-failing request.");
+        }
+
+        try {
+            T result = action.get();
+            onSuccess();
+            return result;
+        } catch (Exception e) {
+            onFailure();
+            throw e;
+        }
+    }
+
+    private void evaluateStateTransition() {
+        if (state.get() == State.OPEN) {
+            long now = System.currentTimeMillis();
+            if (now - openTimestamp >= timeoutMillis) {
+                // If timeout has passed, test the waters. 
+                // compareAndSet ensures only one thread flips to HALF_OPEN.
+                state.compareAndSet(State.OPEN, State.HALF_OPEN);
+            }
+        }
+    }
+
+    private void onSuccess() {
+        if (state.get() == State.HALF_OPEN) {
+            state.set(State.CLOSED);
+        }
+        failureCount.set(0); // Reset failures on any success
+    }
+
+    private void onFailure() {
+        if (state.get() == State.HALF_OPEN) {
+            // A single failure in HALF_OPEN immediately trips it back to OPEN
+            state.set(State.OPEN);
+            openTimestamp = System.currentTimeMillis();
+        } else {
+            // incrementAndGet is atomic
+            if (failureCount.incrementAndGet() >= failureThreshold) {
+                state.set(State.OPEN);
+                openTimestamp = System.currentTimeMillis();
+            }
+        }
+    }
+}
+
+class CircuitBreakerOpenException extends RuntimeException {
+    public CircuitBreakerOpenException(String msg) { super(msg); }
+}
+```
+
+---
+
+## 10. A Money-Transfer Feature Skeleton
+
+The key trap in this problem is deadlocks. If Thread 1 transfers money from Alice to Bob, and Thread 2 transfers money from Bob to Alice simultaneously, naive locking will lock up the JVM. You must lock the accounts in a consistent, globally defined order (e.g., alphabetically by ID).
+
+```java
+import java.math.BigDecimal;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class TransferService {
+    private final ConcurrentHashMap<String, Account> accounts = new ConcurrentHashMap<>();
+
+    public record TransferRequest(String sourceId, String destId, BigDecimal amount, String currency) {}
+    
+    public void executeTransfer(TransferRequest req) {
+        if (req.amount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Transfer amount must be strictly positive");
+        }
+        if (req.sourceId().equals(req.destId())) {
+            throw new IllegalArgumentException("Cannot transfer to the same account");
+        }
+
+        Account src = accounts.get(req.sourceId());
+        Account dest = accounts.get(req.destId());
+        if (src == null || dest == null) throw new IllegalArgumentException("Account not found");
+
+        // PREVENT DEADLOCK: Always lock accounts in consistent alphabetical order
+        Account firstLock = src.getId().compareTo(dest.getId()) < 0 ? src : dest;
+        Account secondLock = src.getId().compareTo(dest.getId()) < 0 ? dest : src;
+
+        firstLock.lock();
+        try {
+            secondLock.lock();
+            try {
+                BigDecimal fee = calculateFee(req.amount());
+                BigDecimal totalDeduction = req.amount().add(fee);
+                
+                if (src.getBalance().compareTo(totalDeduction) < 0) {
+                    throw new InsufficientFundsException("Insufficient funds to cover amount and fee");
+                }
+                
+                src.withdraw(totalDeduction);
+                dest.deposit(req.amount());
+                
+            } finally {
+                secondLock.unlock();
+            }
+        } finally {
+            firstLock.unlock();
+        }
+    }
+
+    private BigDecimal calculateFee(BigDecimal amount) {
+        // Business Logic: Base fee of 0.50 + 1% markup
+        return new BigDecimal("0.50").add(amount.multiply(new BigDecimal("0.01")));
+    }
+}
+
+class Account {
+    private final String id;
+    private BigDecimal balance;
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public Account(String id, BigDecimal initial) { this.id = id; this.balance = initial; }
+    public String getId() { return id; }
+    public BigDecimal getBalance() { return balance; }
+    public void withdraw(BigDecimal amt) { this.balance = this.balance.subtract(amt); }
+    public void deposit(BigDecimal amt) { this.balance = this.balance.add(amt); }
+    public void lock() { lock.lock(); }
+    public void unlock() { lock.unlock(); }
+}
+
+class InsufficientFundsException extends RuntimeException { 
+    public InsufficientFundsException(String m) { super(m); } 
+}
+```
+
+---
+
+## 11. Financial LeetCode: Transaction Volume in 24 Hours
+
+This requires a Sliding Window algorithm using a Deque (Double Ended Queue). Instead of recalculating the entire array (O(N) operation), we maintain a running total and subtract out stale transactions as the window shifts forward, achieving an amortized O(1) time complexity per transaction.
+
+```java
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class TransactionVolumeTracker {
+    private final Deque<Transaction> window = new ArrayDeque<>();
+    private double currentVolume = 0.0;
+    private final long WINDOW_DURATION_MS = 24 * 60 * 60 * 1000L; // 24 hours
+
+    public record Transaction(String id, double amount, long timestamp) {}
+
+    public void addTransaction(Transaction tx) {
+        window.addLast(tx);
+        currentVolume += tx.amount();
+        evictStaleTransactions(tx.timestamp());
+    }
+
+    public double getVolumeInLast24Hours(long currentTime) {
+        evictStaleTransactions(currentTime);
+        return currentVolume;
+    }
+
+    private void evictStaleTransactions(long currentTime) {
+        // Poll from the front of the queue until all events are within the 24h window
+        while (!window.isEmpty() && (currentTime - window.peekFirst().timestamp() > WINDOW_DURATION_MS)) {
+            Transaction stale = window.pollFirst();
+            currentVolume -= stale.amount();
+        }
+    }
+}
+```
+
+---
+
+## 12. Scam Prevention Context: Real-Time Velocity Rate Limiter
+
+This problem tests your ability to scope data structures. You cannot use a single global queue, or memory will explode and locking will choke the system. You must partition the state per user.
+
+Using a ConcurrentHashMap for the global context ensures different users can be processed in parallel. Using a synchronized block at the UserContext level ensures that if a single user spams 1,000 requests in one millisecond, those specific requests are evaluated linearly to prevent race conditions.
+
+```java
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FraudDetectionEngine {
+    private static final long TIME_WINDOW_MS = 60000L; // 60 seconds
+    private static final int MAX_TX_PER_WINDOW = 5;
+    private static final int MAX_NEW_ACCOUNT_TX = 3;
+
+    public record Transaction(String userId, String targetAccountId, boolean isTargetNew, long timestamp) {}
+
+    // Global, thread-safe map holding isolated state for each user
+    private final ConcurrentHashMap<String, UserContext> userStates = new ConcurrentHashMap<>();
+
+    public boolean isFraudulent(Transaction tx) {
+        // computeIfAbsent is atomic and thread-safe
+        UserContext ctx = userStates.computeIfAbsent(tx.userId(), k -> new UserContext());
+        return ctx.evaluateAndAdd(tx);
+    }
+
+    // Encapsulated state for a single user
+    private static class UserContext {
+        // Sliding window for velocity rule
+        private final Deque<Long> recentTimestamps = new ArrayDeque<>();
+        // Frequency map for target account rule
+        private final Map<String, Integer> newAccountTransfers = new HashMap<>();
+
+        // Synchronize on the specific user instance, not globally
+        public synchronized boolean evaluateAndAdd(Transaction tx) {
+            evictStale(tx.timestamp());
+
+            // Check Rule 1: Velocity (> 5 tx in 60s)
+            if (recentTimestamps.size() >= MAX_TX_PER_WINDOW) {
+                return true;
+            }
+
+            // Check Rule 2: Sent to same new account 3 times
+            if (tx.isTargetNew()) {
+                int count = newAccountTransfers.getOrDefault(tx.targetAccountId(), 0);
+                if (count + 1 >= MAX_NEW_ACCOUNT_TX) {
+                    return true;
+                }
+            }
+
+            // Transaction passed checks; record it in state
+            recentTimestamps.addLast(tx.timestamp());
+            if (tx.isTargetNew()) {
+                newAccountTransfers.put(
+                    tx.targetAccountId(), 
+                    newAccountTransfers.getOrDefault(tx.targetAccountId(), 0) + 1
+                );
+            }
+            
+            return false;
+        }
+
+        private void evictStale(long currentTimestamp) {
+            while (!recentTimestamps.isEmpty() && (currentTimestamp - recentTimestamps.peekFirst() > TIME_WINDOW_MS)) {
+                recentTimestamps.pollFirst();
+            }
+        }
+    }
+}
+```
